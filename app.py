@@ -24,7 +24,7 @@ def submit():
     entities = get_entities(text)
     entities = convert_to_serializable(entities)
     print(entities)
-    return json.dumps(entities)
+    return json.dumps(entities, ensure_ascii=False).encode('utf8')
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,0 +1,27 @@
+span.NOUN {
+    color: blue;
+}
+
+span.VERB {
+    color: green;
+}
+
+span.ADP {
+    color: purple;
+}
+
+span.NUM {
+    color: orange;
+}
+
+span.ADJ {
+    color: red;
+}
+
+span.DET {
+    color: brown;
+}
+
+span.PUNCT {
+    color: grey;
+}
