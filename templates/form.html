@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flask Form with AJAX</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <h1>Submit Your Information</h1>
@@ -16,9 +17,11 @@
     
         <input type="submit" value="Submit">
     </form>
-    <div id="response"></div>
+
+    <div id="content"></div>
 
     <script>
+ 
         $(document).ready(function() {
             $('#inputForm').on('submit', function(event) {
                 event.preventDefault(); // Prevent the form from submitting normally
@@ -32,8 +35,16 @@
                     url: '{{ url_for("submit") }}',
                     data: formData,
                     success: function(response) {
-                        console.log(response)
-                        $('#response').html(response);
+                        var contentDiv = $('#content');
+                        contentDiv.empty();  // Clear previous content
+                        let jsonResponse = JSON.parse(response)
+                        jsonResponse.forEach(function(item) {
+                            var span = $('<span></span>')
+                                .text(item.word)
+                                .addClass(item.entity);
+
+                            contentDiv.append(span).append(' ');  // Add span to content and a space
+                        });
                     },
                     error: function() {
                         $('#response').html('An error occurred.');
