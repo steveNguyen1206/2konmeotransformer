@@ -57,7 +57,7 @@
                 </div>
 
                 <!-- output section  -->
-                <div class="d-flex flex-column" style="height: 40%;">
+                <div class="d-flex flex-column" style="height: 50%;">
                     <div class="d-flex justify-content-between mb-3">
                         <div class="d-flex align-items-center">
                             <div class="d-flex flex-column justify-content-center " style="height: 40px; width: 40px; background-color: #D9D9D9; border-radius: 50%;">
@@ -149,25 +149,29 @@
                         </div> -->
                     </div>
                 </div>
-                <div class="">
-                    <p class="fs-6 mt-3 text-secondary">Chi tiết</p>
-                    <p class="fs-5 mt-1 ">mùa</p>
-                    <div class="d-flex justify-content-between">
-                        <span class="">Loại:</span>
-                        <span class="">Danh từ</span>
+                <div class="" style="height: 40%;">
+                    <div class="visually-hidden" id="detail">
+                        <p class="fs-6 mt-3 text-secondary">Chi tiết</p>
+                        <p class="fs-5 mt-1" id="select-word">mùa</p>
+                        <div class="d-flex justify-content-between">
+                            <span class="">Loại:</span>
+                            <span class="" id="tag">Danh từ</span>
+                        </div>
+                        <!-- <div class="d-flex justify-content-between">
+                            <span class="">Tổng số lượng:</span>
+                            <span class="">8</span>
+                        </div>  -->
+                        <div class="d-flex justify-content-between">
+                            <span class="">Độ tin cậy:</span>
+                            <span class="" id="score">90%</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="">Vị trí trong câu:</span>
+                            <span class="" id="postion">13 - 15</span>
+                        </div>
+
                     </div>
-                    <div class="d-flex justify-content-between">
-                        <span class="">Tổng số lượng:</span>
-                        <span class="">8</span>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <span class="">Độ tin cậy:</span>
-                        <span class="">90%</span>
-                    </div>
-                    <div class="d-flex justify-content-between">
-                        <span class="">Vị trí trong câu:</span>
-                        <span class="">13 - 15</span>
-                    </div>
+
                 </div>
             </div>
           </div>
@@ -221,17 +225,83 @@
                 HandleSubmit(new Event('submit'));
             }
 
+            // reset filters
+            const resetFilter = function () {
+                $(".entity").each(function() {
+                    $(this).removeClass("enitiy-not-filtered").addClass("text-white");
+                });
+                $(".filter-item").removeClass("text-info").addClass("text-white");
+                $("#detail").addClass("visually-hidden");
+            }
+
+            $("#reset-filter").on("click", function() {
+            resetFilter();
+            });
+
+            // filter
+            const filterList =  ["NOUN", "PUNCT", "ADP", "NUM", "SYM", "SCONJ", "ADJ", "PART", "DET", "CCONJ", "PROPN", "PRON", "_", "ADV", "INTJ", "VERB", "AUX", "X"]
+
+            filterList.forEach(function (item) {
+                // add filter button to filtes container
+                var div = $('<div></div>')
+                    .addClass("col p-2")
+                    .append($('<div></div>')
+                        .addClass(item + " rounded-3 text-white text-center p-1 filter-item")
+                        .css("cursor", "pointer")
+                        .text(item)
+                        .on("click", function() {
+                            $(".entity").each(function() {
+                                // console.log($(this));
+                                if ($(this).hasClass(item)) {
+                                    $(this).removeClass("enitiy-not-filtered").addClass("text-white");
+                                } else {
+                                    $(this).addClass("enitiy-not-filtered").removeClass("text-white");
+                                }
+                            });
+                            $(".filter-item").removeClass("text-info").addClass("text-white");
+                            $(this).addClass("text-info").removeClass("text-white");
+                            $("#detail").addClass("visually-hidden");
+                        }));
+
+                $("#filters").append(div);
+
+            });
+
 
             // submit and response =============================
             $("#delete").on("click", function() {
                 $("#inputForm").val("");
                 $("#content").empty();
                 $("#mesage-text").text("Đang chờ bạn nhập đấy");
+                $("#detail").addClass("visually-hidden");
+                resetFilter();
             });
     
             const ToggleMessageText = function () {
                 $("#mesage-text").toggleClass("visually-hidden");
                 $("#typing").toggleClass("visually-hidden");
+            }
+
+            const converTag = {
+                "NOUN": "Danh từ",
+                "PUNCT": "Dấu câu",
+                "ADP": "Giới từ",
+                "NUM": "Số",
+                "SYM": "Ký tự đặc biệt",
+                "SCONJ": "Liên từ phụ thuộc",
+                "ADJ": "Tính từ",
+                "PART": "Phụ từ",
+                "DET": "Mạo từ",
+                "CCONJ": "Liên từ đẳng lập",
+                "PROPN": "Danh từ riêng",
+                "PRON": "Đại từ",
+                "_": "Không thể phân loại",
+                "ADV": "Trạng từ",
+                "INTJ": "Thán từ",
+                "VERB": "Động từ",
+                "AUX": "Trợ động từ",
+                "X": "Không xác định",
+
             }
 
             const HandleSubmit = function (event) {
@@ -250,6 +320,7 @@
                 ToggleMessageText();
                 var contentDiv = $('#content');
                 contentDiv.empty();  // Clear previous content
+                resetFilter();
     
                 $.ajax({
                     type: 'POST',
@@ -260,7 +331,15 @@
                         jsonResponse.forEach(function(item) {
                             var span = $('<span></span>')
                                 .text(item.word)
-                                .addClass([item.entity, "text-white", "p-1", "rounded-3", "entity", "lh-lg"]);
+                                .addClass([item.entity, "text-white", "p-1", "rounded-3", "entity", "lh-lg"])
+                                .css("cursor", "pointer")
+                                .on("click", function() {
+                                    $("#select-word").text(item.word);
+                                    $("#tag").text(converTag[item.entity]   );
+                                    $("#score").text(String(item.score).substring(0, 5));
+                                    $("#postion").text(item.start + " - " + item.end);
+                                    $("#detail").removeClass("visually-hidden");
+                                });
     
                             contentDiv.append(span).append(' ');  // Add span to content and a space
                         });
@@ -285,44 +364,6 @@
 
             $("#reload").on("click", HandleSubmit);
         });
-
-
-        // filter
-        const filterList =  ["NOUN", "PUNCT", "ADP", "NUM", "SYM", "SCONJ", "ADJ", "PART", "DET", "CCONJ", "PROPN", "PRON", "_", "ADV", "INTJ", "VERB", "AUX", "X"]
-
-        filterList.forEach(function (item) {
-            // add filter button to filtes container
-            var div = $('<div></div>')
-                .addClass("col p-2")
-                .append($('<div></div>')
-                    .addClass(item + " rounded-3 text-white text-center p-1 filter-item")
-                    .css("cursor", "pointer")
-                    .text(item)
-                    .on("click", function() {
-                        $(".entity").each(function() {
-                            console.log($(this));
-                            if ($(this).hasClass(item)) {
-                                $(this).removeClass("enitiy-not-filtered").addClass("text-white");
-                            } else {
-                                $(this).addClass("enitiy-not-filtered").removeClass("text-white");
-                            }
-                        });
-                        $(".filter-item").removeClass("text-info").addClass("text-white");
-                        $(this).addClass("text-info").removeClass("text-white");
-                    }));
-
-            $("#filters").append(div);
-
-        });
-
-        // reset filters
-        $("#reset-filter").on("click", function() {
-            $(".entity").each(function() {
-                $(this).removeClass("enitiy-not-filtered").addClass("text-white");
-            });
-            $(".filter-item").removeClass("text-info").addClass("text-white");
-        });
-
         
     </script> 
 </body>
