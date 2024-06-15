@@ -66,10 +66,10 @@
                             <span id="mesage-text" class=" text-dark ms-3" >Đang chờ bạn nhập đấy</span>
                             <img src="{{ url_for('static', filename='icons/typing.gif') }}" alt="typing..." style="height: 32px; width: 32px;" id="typing" class="visually-hidden ms-3">
                         </div>
-                        <img src="{{ url_for('static', filename='icons/load.svg') }}" alt="Load" class="img-fluid" id="reload" style="cursor: pointer;"> 
+                        <img src="{{ url_for('static', filename='icons/load.svg') }}" alt="Load" class="img-fluid" id="reload" style="cursor: pointer; height: 32px; width: 32px;"> 
                     </div>
-                    <div class="form-floating" style="flex-grow: 1;">
-                        <div class="form-control h-100" placeholder="Leave a comment here" id="content"></div>
+                    <div class="form-floating " style="height: calc(100% - 32px);">
+                        <div class="form-control h-100 scroll" placeholder="Leave a comment here" id="content"></div>
                       </div>
                 </div>
             </div>
@@ -190,7 +190,6 @@
     <script>
         
         $(document).ready(function() {
-
             const ShortenText = function (text) {
                 if (text.length > 20) {
                     return text.substring(0, 20) + "...";
@@ -261,7 +260,7 @@
                         jsonResponse.forEach(function(item) {
                             var span = $('<span></span>')
                                 .text(item.word)
-                                .addClass([item.entity, "text-white", "p-1", "rounded-3", "entity"]);
+                                .addClass([item.entity, "text-white", "p-1", "rounded-3", "entity", "lh-lg"]);
     
                             contentDiv.append(span).append(' ');  // Add span to content and a space
                         });
@@ -295,21 +294,22 @@
             // add filter button to filtes container
             var div = $('<div></div>')
                 .addClass("col p-2")
-                .on("click", function() {
-                    $(".entity").each(function() {
-                        console.log($(this));
-                        if ($(this).hasClass(item)) {
-                            $(this).removeClass("enitiy-not-filtered").addClass("text-white");
-                        } else {
-                            $(this).addClass("enitiy-not-filtered").removeClass("text-white");
-                        }
-                    });
-                })
                 .append($('<div></div>')
-                    .addClass(item + " rounded-3 text-white text-center p-1")
+                    .addClass(item + " rounded-3 text-white text-center p-1 filter-item")
                     .css("cursor", "pointer")
                     .text(item)
-                );
+                    .on("click", function() {
+                        $(".entity").each(function() {
+                            console.log($(this));
+                            if ($(this).hasClass(item)) {
+                                $(this).removeClass("enitiy-not-filtered").addClass("text-white");
+                            } else {
+                                $(this).addClass("enitiy-not-filtered").removeClass("text-white");
+                            }
+                        });
+                        $(".filter-item").removeClass("text-info").addClass("text-white");
+                        $(this).addClass("text-info").removeClass("text-white");
+                    }));
 
             $("#filters").append(div);
 
@@ -320,6 +320,7 @@
             $(".entity").each(function() {
                 $(this).removeClass("enitiy-not-filtered").addClass("text-white");
             });
+            $(".filter-item").removeClass("text-info").addClass("text-white");
         });
 
         

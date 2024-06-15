@@ -46,6 +46,8 @@ def get_entities(text):
     if len(teencode) > 0:
         text = fomarl_text
         entities = vivitb_electra_classifier(text)
+
+        # restruct the original text
         # for index, word in teencode.items():
         #     entities[index]['word'] = word
         return entities
