@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, jsonify
-from model.model import get_entities
+from model.model import get_entities, process_teencode
 import numpy as np
 import json
 
@@ -25,6 +25,14 @@ def submit():
     entities = convert_to_serializable(entities)
     print(entities)
     return json.dumps(entities, ensure_ascii=False).encode('utf8')
+
+@app.route('/test', methods=['GET'])
+def test():
+    text = "Hôm nay, tôi đc đi học."
+    text, teencode = process_teencode(text)
+    print (text)
+    print (teencode)
+    return text 
 
 if __name__ == '__main__':
     app.run(debug=True)
