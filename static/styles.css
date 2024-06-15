@@ -1,3 +1,5 @@
+
+
 .NOUN {
     background-color: #8B4513;
 }
@@ -64,4 +66,13 @@
 
 .AUX {
     background-color: #7673c5;
+}
+
+.X {
+    background-color: #708090;
+}
+
+.enitiy-not-filtered {
+    background-color: transparent !important;
+    color: black !important;
 }
