@@ -3,12 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flask Form with AJAX</title>
+    <title>Vietnamese POS tagging</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" integrity="sha512-ykZ1QQr0Jy/4ZkvKuqWn4iF3lqPZyij9iRv6sGqLRdTPkY69YX6+7wvVGmsdBbiIfN/8OdsI7HABjvEok6ZopQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" integrity="sha512-jnSuA4Ss2PkkikSOLtYs8BlYIeeIK1h99ty4YfvRPAlzr377vr3CXDb7sb7eEEBYjDtcYj+AjBH3FLv5uSJuXg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    <h1>Submit Your Information</h1>
+      
+        <div class="row p-2 gx-2  bg-light " style="height: 100dvh;width: 100dvw;">
+
+            <!-- left side bar -->
+          <div class="col-3 mh-100 ">
+           <div class="d-flex flex-column justify-content-between p-3 border bg-white rounded-3 h-100">
+            <p class="fs-4 mt-5 ">Vietnamese POS Tagging</p>
+
+            <p class="fs-6 mt-100 text-secondary" style="margin-top: 150px;">History</p>
+            <div class="col h-50" >
+                <div class="row gy-1 h-100 scroll" id="history" >
+                    <!-- <div class="d-flex justify-content-between" style="cursor: pointer;"> 
+                        <span>Hôm nay là một ...</span>
+                        <span>4:00AM</span>
+                    </div>
+                    <div class="d-flex justify-content-between" style="cursor: pointer;"> 
+                        <span>Hôm nay là một ...</span>
+                        <span>4:00AM</span>
+                    </div>
+                    <div class="d-flex justify-content-between" style="cursor: pointer;"> 
+                        <span>Hôm nay là một ...</span>
+                        <span>4:00AM</span>
+                    </div> -->
+                </div>
+
+            </div>
+            
+           </div>
+          </div>
+
+          <!-- middle -->
+          <div class="col-6 h-100 ">
+            <div class="p-4 border bg-white rounded-3 h-100 d-flex flex-column justify-content-around ">
+
+                <!-- input form -->
+                <div class="d-flex flex-column" style="height: 40%;">
+                    <div class="d-flex justify-content-between mb-3">
+                        <button id="submit" type="button" class="btn btn-secondary">Phân tích</button>
+                        <img src="{{ url_for('static', filename='icons/delete.svg') }}" alt="Delete" class="img-fluid" id="delete" style="cursor: pointer;"> 
+                    </div>
+                    <div class="form-floating" style="flex-grow: 1;">
+                        <textarea  class="form-control h-100" placeholder="Leave a comment here" id="inputForm"></textarea>
+                        <label for="floatingTextarea">Nhập nội dung</label>
+                      </div>
+                </div>
+
+                <!-- output section  -->
+                <div class="d-flex flex-column" style="height: 50%;">
+                    <div class="d-flex justify-content-between mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="d-flex flex-column justify-content-center " style="height: 40px; width: 40px; background-color: #D9D9D9; border-radius: 50%;">
+                                <span class="text-center text-white">AI</span>
+                            </div>
+                            <span id="mesage-text" class=" text-dark ms-3" >Đang chờ bạn nhập đấy</span>
+                            <img src="{{ url_for('static', filename='icons/typing.gif') }}" alt="typing..." style="height: 32px; width: 32px;" id="typing" class="visually-hidden ms-3">
+                        </div>
+                        <img src="{{ url_for('static', filename='icons/load.svg') }}" alt="Load" class="img-fluid" id="reload" style="cursor: pointer; height: 32px; width: 32px;"> 
+                    </div>
+                    <div class="form-floating " style="height: calc(100% - 32px);">
+                        <div class="form-control h-100 scroll" placeholder="Leave a comment here" id="content"></div>
+                      </div>
+                </div>
+            </div>
+          </div>
+
+          <!-- right side bar -->
+
+          
+
+          <div class="col-3 h-100">
+            <div class="p-3 border bg-white rounded-3 h-100 d-flex flex-column justify-content-around">
+                <div class="">
+                    <div class="d-flex justify-content-between ">
+                        <span class="fs-6 mt-2 ">Filter</span>
+                        
+                        <!-- reset filters -->
+                        <img src="{{ url_for('static', filename='icons/load.svg') }}" alt="reset filter" class="img-fluid" id="reset-filter" style="cursor: pointer; width: 24px;">
+                    </div>
+                    <div class="row row-cols-4 mt-1" id="filters">
+                        
+    
+                        <!-- <div class="col p-2 ">
+                            <div class="NOUN rounded-3 text-white text-center p-1" style="cursor: pointer;"  >NOUN</div>
+                        </div>
+                        <div class="col p-2 ">
+                            <div class="PUNCT rounded-3 text-white text-center p-1" style="cursor: pointer;"  >PUNCT</div>
+                        </div>
+                        <div class="col p-2 ">
+                            <div class="ADP rounded-3 text-white text-center p-1" style="cursor: pointer;"  >ADP</div>
+                        </div>
+                        <div class="col p-2 ">
+                            <div class="NUM rounded-3 text-white text-center p-1" style="cursor: pointer;"  >NUM</div>
+                        </div>
+                        <div class="col p-2 ">
+                            <div class="SYM rounded-3 text-white text-center p-1" style="cursor: pointer;"  >SYM</div>
+                        </div>
+                        <div class="col p-2 ">
+                            <div class="SCONJ rounded-3 text-white text-center p-1" style="cursor: pointer;"  >SCONJ</div>
+                        </div>
+                        <div class="col p-2 ">
+                            <div class="ADJ rounded-3 text-white text-center p-1" style="cursor: pointer;" >ADJ</div>
+                        </div>
+                        <div class="col p-2 ">
+                            <div class="PART rounded-3 text-white text-center p-1" style="cursor: pointer;"  >PART</div>
+                        </div>
+                        <div class="col p-2 ">
+                            <div class="DET rounded-3 text-white text-center p-1" style="cursor: pointer;"  >DET</div>
+                        </div>
+                        <div class="col p-2 ">
+                            <div class="CCONJ rounded-3 text-white text-center p-1" style="cursor: pointer;"  >CCONJ</div>
+                        </div>
+                        <div class="col p-2 ">
+                            <div class="PROPN rounded-3 text-white text-center p-1" style="cursor: pointer;"  >PROPN</div>
+                        </div>
+                        <div class="col p-2 ">
+                            <div class="PRON rounded-3 text-white text-center p-1" style="cursor: pointer;"  >PRON</div>
+                        </div>
+                        <div class="col p-2 ">
+                            <div class="_ rounded-3 text-white text-center p-1" style="cursor: pointer;"  >_</div>
+                        </div>
+                        <div class="col p-2 ">
+                            <div class="ADV rounded-3 text-white text-center p-1" style="cursor: pointer;"  >ADV</div>
+                        </div>
+                        <div class="col p-2 ">
+                            <div class="INTJ rounded-3 text-white text-center p-1" style="cursor: pointer;"  >INTJ</div>
+                        </div>
+                        <div class="col p-2 ">
+                            <div class="VERB rounded-3 text-white text-center p-1" style="cursor: pointer;"  >VERB</div>
+                        </div>
+
+                        <div class="col p-2 ">
+                            <div class="AUX rounded-3 text-white text-center p-1" style="cursor: pointer;"  >AUX</div>
+                        </div>
+
+                        <div class="col p-2 ">
+                            <div class="X rounded-3 text-white text-center p-1" style="cursor: pointer;"  >X</div>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="" style="height: 40%;">
+                    <div class="visually-hidden" id="detail">
+                        <p class="fs-6 mt-3 text-secondary">Chi tiết</p>
+                        <p class="fs-5 mt-1" id="select-word">mùa</p>
+                        <div class="d-flex justify-content-between">
+                            <span class="">Loại:</span>
+                            <span class="" id="tag">Danh từ</span>
+                        </div>
+                        <!-- <div class="d-flex justify-content-between">
+                            <span class="">Tổng số lượng:</span>
+                            <span class="">8</span>
+                        </div>  -->
+                        <div class="d-flex justify-content-between">
+                            <span class="">Độ tin cậy:</span>
+                            <span class="" id="score">90%</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="">Vị trí trong câu:</span>
+                            <span class="" id="postion">13 - 15</span>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+          </div>
+
+        </div>
+
+    <!-- <h1>Submit Your Information</h1>
     <form id="inputForm">
         <label for="input">Text:</label>
         <input type="text" id="input" name="input" required>
@@ -19,39 +189,182 @@
     </form>
 
     <div id="content"></div>
+    --->
 
     <script>
- 
+        
         $(document).ready(function() {
-            $('#inputForm').on('submit', function(event) {
+            const ShortenText = function (text) {
+                if (text.length > 20) {
+                    return text.substring(0, 20) + "...";
+                }
+                return text;
+            }
+
+            // Load history from local storage
+            const AddHistory = function (text, key) {
+                var historyDiv = $('#history');
+                var div = $('<div></div>')
+                    .addClass("d-flex justify-content-between history-item mb-1").attr('id', key)
+                    .css("cursor", "pointer")
+                    .on('click', () => HandleHistoryClick(text))
+                    .append($('<span></span>').text(ShortenText(text)))
+                    .append($('<span></span>').text(key.getDate() + "/" + key.getMonth() + " " + key.getHours() + ":" + key.getMinutes()))
+
+                historyDiv.prepend(div);
+            }
+
+            for (var i = 0; i < localStorage.length; i++) {
+                var key = localStorage.key(i);
+                var value = localStorage.getItem(key);
+                AddHistory(value, new Date(key));
+            }
+
+            const HandleHistoryClick = function (text) {
+                $('#inputForm').val(text);
+                HandleSubmit(new Event('submit'));
+            }
+
+            // reset filters
+            const resetFilter = function () {
+                $(".entity").each(function() {
+                    $(this).removeClass("enitiy-not-filtered").addClass("text-white");
+                });
+                $(".filter-item").removeClass("text-info").addClass("text-white");
+                $("#detail").addClass("visually-hidden");
+            }
+
+            $("#reset-filter").on("click", function() {
+            resetFilter();
+            });
+
+            // filter
+            const filterList =  ["NOUN", "PUNCT", "ADP", "NUM", "SYM", "SCONJ", "ADJ", "PART", "DET", "CCONJ", "PROPN", "PRON", "_", "ADV", "INTJ", "VERB", "AUX", "X"]
+
+            filterList.forEach(function (item) {
+                // add filter button to filtes container
+                var div = $('<div></div>')
+                    .addClass("col p-2")
+                    .append($('<div></div>')
+                        .addClass(item + " rounded-3 text-white text-center p-1 filter-item")
+                        .css("cursor", "pointer")
+                        .text(item)
+                        .on("click", function() {
+                            $(".entity").each(function() {
+                                // console.log($(this));
+                                if ($(this).hasClass(item)) {
+                                    $(this).removeClass("enitiy-not-filtered").addClass("text-white");
+                                } else {
+                                    $(this).addClass("enitiy-not-filtered").removeClass("text-white");
+                                }
+                            });
+                            $(".filter-item").removeClass("text-info").addClass("text-white");
+                            $(this).addClass("text-info").removeClass("text-white");
+                            $("#detail").addClass("visually-hidden");
+                        }));
+
+                $("#filters").append(div);
+
+            });
+
+
+            // submit and response =============================
+            $("#delete").on("click", function() {
+                $("#inputForm").val("");
+                $("#content").empty();
+                $("#mesage-text").text("Đang chờ bạn nhập đấy");
+                $("#detail").addClass("visually-hidden");
+                resetFilter();
+            });
+    
+            const ToggleMessageText = function () {
+                $("#mesage-text").toggleClass("visually-hidden");
+                $("#typing").toggleClass("visually-hidden");
+            }
+
+            const converTag = {
+                "NOUN": "Danh từ",
+                "PUNCT": "Dấu câu",
+                "ADP": "Giới từ",
+                "NUM": "Số",
+                "SYM": "Ký tự đặc biệt",
+                "SCONJ": "Liên từ phụ thuộc",
+                "ADJ": "Tính từ",
+                "PART": "Phụ từ",
+                "DET": "Mạo từ",
+                "CCONJ": "Liên từ đẳng lập",
+                "PROPN": "Danh từ riêng",
+                "PRON": "Đại từ",
+                "_": "Không thể phân loại",
+                "ADV": "Trạng từ",
+                "INTJ": "Thán từ",
+                "VERB": "Động từ",
+                "AUX": "Trợ động từ",
+                "X": "Không xác định",
+
+            }
+
+            const HandleSubmit = function (event) {
                 event.preventDefault(); // Prevent the form from submitting normally
-
+    
                 var formData = {
-                    text: $('#input').val(),
+                    text: $('#inputForm').val(),
                 };
-
+    
+                if (formData.text === "") {
+                    alert("Bạn quên nhận nộp dung nè");
+                    return;
+                }
+    
+                console.log(formData);
+                ToggleMessageText();
+                var contentDiv = $('#content');
+                contentDiv.empty();  // Clear previous content
+                resetFilter();
+    
                 $.ajax({
                     type: 'POST',
                     url: '{{ url_for("submit") }}',
                     data: formData,
                     success: function(response) {
-                        var contentDiv = $('#content');
-                        contentDiv.empty();  // Clear previous content
                         let jsonResponse = JSON.parse(response)
                         jsonResponse.forEach(function(item) {
                             var span = $('<span></span>')
                                 .text(item.word)
-                                .addClass(item.entity);
-
+                                .addClass([item.entity, "text-white", "p-1", "rounded-3", "entity", "lh-lg"])
+                                .css("cursor", "pointer")
+                                .on("click", function() {
+                                    $("#select-word").text(item.word);
+                                    $("#tag").text(converTag[item.entity]   );
+                                    $("#score").text(String(item.score).substring(0, 5));
+                                    $("#postion").text(item.start + " - " + item.end);
+                                    $("#detail").removeClass("visually-hidden");
+                                });
+    
                             contentDiv.append(span).append(' ');  // Add span to content and a space
                         });
+    
+                        $("#mesage-text").text("Kết quả của tớ nè");
+                        ToggleMessageText();
                     },
                     error: function() {
                         $('#response').html('An error occurred.');
                     }
                 });
+            }
+
+            $('#submit').on('click', function(event) {
+                HandleSubmit(event);
+                var key = new Date();
+                var text = $('#inputForm').val();
+                AddHistory(text, key);
+                localStorage.setItem(key, text);
+
             });
+
+            $("#reload").on("click", HandleSubmit);
         });
-    </script>
+        
+    </script> 
 </body>
 </html>

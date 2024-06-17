@@ -1,27 +1,96 @@
-span.NOUN {
-    color: blue;
+
+
+.NOUN {
+    background-color: #8B4513;
 }
 
-span.VERB {
-    color: green;
+.PUNCT {
+    background-color: #A9A9A9;
 }
 
-span.ADP {
-    color: purple;
+.ADP {
+    background-color: #F4A460;
 }
 
-span.NUM {
-    color: orange;
+.NUM {
+    background-color: #D2B48C;
 }
 
-span.ADJ {
-    color: red;
+.SYM {
+    background-color: #556B2F;
 }
 
-span.DET {
-    color: brown;
+.SCONJ {
+    background-color: #8FBC8F;
 }
 
-span.PUNCT {
-    color: grey;
+.ADJ {
+    background-color: #CD5C5C;
 }
+
+.PART {
+    background-color: #DAA520;
+}
+
+.DET {
+    background-color: #BC8F8F;
+}
+
+.CCONJ {
+    background-color: #4682B4;
+}
+
+.PROPN {
+    background-color: #FF7F50;
+}
+
+.PRON {
+    background-color: #2F4F4F;
+}
+
+.ADV {
+    background-color: #20B2AA;
+}   
+
+.INTJ {
+    background-color: #FF6347;
+}
+
+.VERB {
+    background-color: #6B8E23;
+}
+
+._ {
+    background-color: #D3D3D3;
+}
+
+.AUX {
+    background-color: #7673c5;
+}
+
+.X {
+    background-color: #708090;
+}
+
+.enitiy-not-filtered {
+    background-color: transparent !important;
+    color: black !important;
+}
+
+
+.scroll {
+    overflow-y: scroll;
+ }
+ .scroll::-webkit-scrollbar {
+     width: 6px;
+ }
+ 
+ .scroll::-webkit-scrollbar-track {
+     -webkit-box-shadow: inset 0 0 3px rgba(0,0,0,0.3); 
+     border-radius: 10px;
+ }
+ 
+ .scroll::-webkit-scrollbar-thumb {
+     border-radius: 10px;
+     -webkit-box-shadow: inset 0 0 3px rgba(0,0,0,0.5); 
+ }
