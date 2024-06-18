@@ -20,7 +20,7 @@
 
             <p class="fs-6 mt-100 text-secondary" style="margin-top: 150px;">History</p>
             <div class="col h-50" >
-                <div class="row gy-1 h-100 scroll" id="history" >
+                <div class="d-flex flex-column gy-1 h-100 scroll justify-content-start" id="history" >
                     <!-- <div class="d-flex justify-content-between" style="cursor: pointer;"> 
                         <span>Hôm nay là một ...</span>
                         <span>4:00AM</span>
@@ -313,7 +313,7 @@
     
                 if (formData.text === "") {
                     alert("Bạn quên nhận nộp dung nè");
-                    return;
+                    return false;
                 }
     
                 console.log(formData);
@@ -346,19 +346,23 @@
     
                         $("#mesage-text").text("Kết quả của tớ nè");
                         ToggleMessageText();
+                        return true;
                     },
                     error: function() {
                         $('#response').html('An error occurred.');
+                        return false;
                     }
                 });
+                return true;
             }
 
             $('#submit').on('click', function(event) {
-                HandleSubmit(event);
-                var key = new Date();
-                var text = $('#inputForm').val();
-                AddHistory(text, key);
-                localStorage.setItem(key, text);
+                if (HandleSubmit(event)) {
+                    var key = new Date();
+                    var text = $('#inputForm').val();
+                    AddHistory(text, key);
+                    localStorage.setItem(key, text);
+                }
 
             });
 
