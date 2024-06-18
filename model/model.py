@@ -16,7 +16,6 @@ def load_db_from_text_file(file_path):
             db[key] = value
     return db
 
-# Example usage
 teencode_db = load_db_from_text_file(TEENCODE_PATH)
 
 
