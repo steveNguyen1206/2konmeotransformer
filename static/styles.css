@@ -77,6 +77,10 @@
     color: black !important;
 }
 
+.history-item:hover {
+    background-color: #f8f9fa;
+}
+
 
 .scroll {
     overflow-y: scroll;
