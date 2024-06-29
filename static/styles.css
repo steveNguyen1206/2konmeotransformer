@@ -98,3 +98,47 @@
      border-radius: 10px;
      -webkit-box-shadow: inset 0 0 3px rgba(0,0,0,0.5); 
  }
+
+ .tooltip {
+    position: relative;
+    display: inline-block;
+    opacity: 1 !important;
+  }
+
+ .tooltip .tooltiptext {
+    visibility: hidden;
+    background-color: rgb(204, 201, 201);
+    color: #ffffff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 3px 5px;
+  
+    /* Position the tooltip */
+    position: absolute;
+    z-index:  1;
+    top: -30%;
+    left: -40%;
+    opacity: 0.8 !important;
+    cursor: pointer;
+  }
+  
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }
+
+  .filter-item {
+    position: relative; 
+  }
+
+  .filter-item.filter-selected::after {
+    content: ''; /* Create the pseudo-element */
+    position: absolute; /* Position it absolutely within the parent */
+    top: -10px; /* Align it to the top */
+    right: -10px; /* Align it to the right */
+    width: 20px; /* Adjust the size as needed */
+    height: 20px; /* Adjust the size as needed */
+    /* background-color: red; Change to desired color */
+    background-image:  url('./icons/selected.png');
+    background-size: contain;
+    /* border-radius: 50%; Make it a circle */
+  }

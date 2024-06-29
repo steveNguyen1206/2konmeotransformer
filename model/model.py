@@ -35,6 +35,17 @@ def process_teencode (text):
     
     return formal_text, teencode
 
+def concat_unseen_entities(entities):
+
+    # get enities that begin with ##
+    new_entities = []
+    for index, entity in enumerate(entities):
+        if index > 0 and entity['word'].startswith('##'):
+            new_entities[-1]['word'] += entity['word'][2:]
+        else:
+            new_entities.append(entity)
+    return new_entities
+
 
 def get_entities(text):
     vivitb_electra_classifier = pipeline("ner", model=VITB_ELECTRA_MODEL_PATH)
@@ -49,6 +60,6 @@ def get_entities(text):
         # restruct the original text
         # for index, word in teencode.items():
         #     entities[index]['word'] = word
-        return entities
+        return concat_unseen_entities(entities)
 
-    return vivitb_electra_classifier(text)
+    return concat_unseen_entities(vivitb_electra_classifier(text))
