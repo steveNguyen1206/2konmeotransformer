@@ -236,7 +236,7 @@
                 $(".entity").each(function() {
                     $(this).removeClass("enitiy-not-filtered").addClass("text-white");
                 });
-                $(".filter-item").removeClass("text-info").addClass("text-white");
+                $(".filter-item").removeClass("filter-selected")
                 $("#detail").addClass("visually-hidden");
             }
 
@@ -246,11 +246,12 @@
 
             // filter
             const filterList =  ["NOUN", "PUNCT", "ADP", "NUM", "SYM", "SCONJ", "ADJ", "PART", "DET", "CCONJ", "PROPN", "PRON", "_", "ADV", "INTJ", "VERB", "AUX", "X"]
+            const filters_vietnamese_list = ["Danh từ", "Dấu câu", "Giới từ", "Số", "Ký tự đặc biệt", "Liên từ phụ thuộc", "Tính từ", "Phụ từ", "Mạo từ", "Liên từ đẳng lập", "Danh từ riêng", "Đại từ", "Chưa phân loại", "Trạng từ", "Thán từ", "Động từ", "Trợ động từ", "Không xác định"]
 
-            filterList.forEach(function (item) {
+            filterList.forEach(function (item, index) {
                 // add filter button to filtes container
                 var div = $('<div></div>')
-                    .addClass("col p-2")
+                    .addClass("col p-2 tooltip")
                     .append($('<div></div>')
                         .addClass(item + " rounded-3 text-white text-center p-1 filter-item")
                         .css("cursor", "pointer")
@@ -264,10 +265,12 @@
                                     $(this).addClass("enitiy-not-filtered").removeClass("text-white");
                                 }
                             });
-                            $(".filter-item").removeClass("text-info").addClass("text-white");
-                            $(this).addClass("text-info").removeClass("text-white");
+                            $(".filter-item").removeClass("filter-selected")
+                            $(this).addClass("filter-selected")
                             $("#detail").addClass("visually-hidden");
                         }));
+
+                div.append($(`<span class="tooltiptext">${filters_vietnamese_list[index]}</span>`))
 
                 $("#filters").append(div);
 
